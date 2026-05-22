@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پاسکیلی ئالان - Alan Bike</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* سەرپەڕی وێبسایت */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            color: #f59e0b;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* دوگمەی ئەدمین بە پاسۆرد */
+        .admin-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background-color: #f59e0b;
+            color: #0f172a;
+            border-color: #f59e0b;
+        }
+
+        /* بەشی بەرهەمەکان */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            color: #1e293b;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #f59e0b;
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* کارتی پاسکیلەکان */
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .product-image-box {
+            width: 100%;
+            height: 240px;
+            background-color: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .product-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image-box img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .product-price {
+            color: #10b981;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* دوگمەی واتسئەپ */
+        .buy-btn {
+            background-color: #25d366;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.05rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+        }
+
+        .buy-btn:hover {
+            background-color: #20ba5a;
+        }
+
+        /* دوگمەی سڕینەوە بۆ ئەدمین */
+        .delete-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        /* پێپەڕی وێبسایت */
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 25px;
+            margin-top: 80px;
+            font-size: 0.95rem;
+            border-top: 1px solid #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="admin-btn" onclick="openAdminPanel()">🛠 پانێڵی بەڕێوەبەر</button>
+        <h1>پاسکیلی ئالان</h1>
+        <p>باشترین و بەهێزترین پاسکیلە جیهانییەکان لای ئێمە بەدەستبهێنە بە گونجاوترین نرخ</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">نوێترین پاسکیلەکانمان</h2>
+        <div class="products-grid" id="productsContainer">
+            </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 پاسکیلی ئالان - هەموو مافەکانی پارێزراوە. دروستکراوە بە شانازییەوە.</p>
+    </footer>
+
+    <script>
+        // پاسۆردی فەرمی وێبسایتەکەت
+        const ADMIN_PASSWORD = "alan123"; 
+        
+        // ژمارەی واتسئەپی تۆ بە کۆدی نێودەوڵەتی عێراقەوە (964)
+        const MY_WHATSAPP = "9647501851817";
+
+        // دوو پاسکیلی نموونەیی سەرەتایی
+        const defaultProducts = [
+            { id: 1, title: "پاسکیلی کێوی شاخاوی (Mountain Bike)", price: "350", img: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600" },
+            { id: 2, title: "پاسکیلی کێبڕکێی خێرا (Sport Bike)", price: "420", img: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=600" }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('alan_bikes')) || defaultProducts;
+        let isAdmin = false;
+
+        // پیشاندانی پاسکیلەکان
+        function displayProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                // دروستکردنی لینی نامەی واتسئەپ بۆ هەر پاسکیلێک
+                const message = `سڵاو کاک ئالان، دەمەوێت ئەم پاسکيلە داوا بکەم:\n- جۆر: ${product.title}\n- نرخ: $${product.price}`;
+                const whatsappUrl = `https://wa.me/${MY_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-image-box">
+                            <img src="${product.img}" alt="${product.title}">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">${product.title}</h3>
+                            <p class="product-price">$${product.price}</p>
+                            <a href="${whatsappUrl}" target="_blank" class="buy-btn">
+                                💬 داواکردن لە واتسئەپ
+                            </a>
+                            <button class="delete-btn" style="display: ${isAdmin ? 'inline-block' : 'none'}" onclick="deleteProduct(${product.id})">🗑 سڕینەوەی بەرهەم</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // فرمانی تێپەڕبوون بە پاسۆرد و زیادکردنی پاسکیل
+        function openAdminPanel() {
+            const password = prompt("تکایە پاسۆردی بەڕێوەبەر بنووسە بۆ زیادکردنی پاسکیلی نوێ:");
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                displayProducts(); // بۆ ئەوەی دوگمەی سڕینەوە دیار بێت کاتێک چووە ژوورەوە
+
+                const title = prompt("ناوی پاسکیلە نوێیەکە چییە؟");
+                if (!title) return;
+                
+                const price = prompt("نرخەکەی چەندە؟ (تەنها ژمارە بنووسە بە دۆلار):");
+                if (!price) return;
+                
+                const img = prompt("لینکی وێنەکەی دابنێ (ئەگەر نییە، لێگەڕێ با وێنەی بنەڕەتی بێت):", "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600");
+
+                const newProduct = {
+                    id: Date.now(),
+                    title: title,
+                    price: price,
+                    img: img
+                };
+
+                products.push(newProduct);
+                localStorage.setItem('alan_bikes', JSON.stringify(products));
+                displayProducts();
+                alert("پاسکیلەکە بە سەرکەوتوویی زیادکرا و خرایە ناو لیستەکەوە!");
+            } else if (password !== null) {
+                alert("پاسۆردی هەڵەیە! تۆ ناتوانیت دەستکاری وێبسایتەکە بکەیت.");
+            }
+        }
+
+        // فرمانی سڕینەوە
+        function deleteProduct(id) {
+            if (confirm("دڵنیای لە سڕینەوەی ئەم پاسکیلە لە وێبسایتەکە؟")) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('alan_bikes', JSON.stringify(products));
+                displayProducts();
+            }
+        }
+
+        // لێدانی یەکەمجار بۆ پیشاندانی پاسکیلەکان
+        displayProducts();
+    </script>
+</body>
+</html>
